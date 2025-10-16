@@ -1,0 +1,24 @@
+name: Build Windows EXE
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install pyinstaller docxtpl python-docx tk
+      - name: Build EXE
+        run: pyinstaller --onefile --windowed main.py
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: generator-exe
+          path: dist/*.exe
